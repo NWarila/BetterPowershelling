@@ -24,7 +24,7 @@
 	1.0         05 March 2020	Warilia, Nicholas R.		Initial version
 
         Credits:
-            (1) Script Template: 
+            (1) Script Template: https://github.com/HellBomb/BetterPowershelling/blob/master/Tools/Script-Template/Script-Template.ps1
 #>
 
 Param (
