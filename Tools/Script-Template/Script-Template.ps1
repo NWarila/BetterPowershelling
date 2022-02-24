@@ -499,11 +499,18 @@
 #region----------------------------------------- [Initializations & Prerequisites] -----------------------------------------------
 
     #Non Write-Host dependent trap to conduct debugging before write-host is enabled.
-    Trap {
-        Write-Host -Object "Failed to execute command: $([string]::join(`"`",$_.InvocationInfo.line.split(`"`n`")))"
-        Write-Host -Object "$($_.Exception.Message) [$($_.Exception.GetType().FullName)]" -Line $_.InvocationInfo.ScriptLineNumber
-        Continue
-    }
+    New-Variable -Name nLogInitialize -Value:$False -Force
+        $ErrorActionPreference = [System.Management.Automation.ActionPreference]::Stop
+        Trap {
+            if ($nLogInitialize) {
+                Write-nLog -Type Debug -Message "Failed to execute command: $([string]::join(`"`",$_.InvocationInfo.line.split(`"`n`")))"
+                Write-nLog -Type Error -Message "$($_.Exception.Message) [$($_.Exception.GetType().FullName)]" -Line $_.InvocationInfo.ScriptLineNumber
+            } Else {
+                Write-Host -Object "Failed to execute command: $([string]::join(`"`",$_.InvocationInfo.line.split(`"`n`")))"
+                Write-Host -Object "$($_.Exception.Message) [$($_.Exception.GetType().FullName)]"
+            }
+            Continue
+        }
 
     #region [configure environment variables] ---------------------------------------------------------
 
